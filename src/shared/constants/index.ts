@@ -1,6 +1,13 @@
-// /constants/navigation.ts
-
-import { ROUTES } from './routes';
+export const ROUTES = {
+  HOME: '/',
+  BONDS: '/bonds',
+  FAQ: '/faq',
+  HOW_IT_WORKS: '/how-it-works',
+  FEATURES: '/features',
+  START: '/start',
+  LOGIN: '/login',
+  REGISTER: '/register',
+};
 
 export const HEADER_TABS = [
   {
@@ -28,3 +35,9 @@ export const HEADER_TABS = [
     path: ROUTES.FAQ,
   },
 ];
+
+export const AUTH_STATUS = {
+  UNAUTHENTICATED: 'unauthenticated',
+  AUTHENTICATED: 'authenticated',
+  LOADING: 'loading',
+};

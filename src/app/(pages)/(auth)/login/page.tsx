@@ -1,5 +1,10 @@
 'use client';
 
+import { zodResolver } from '@hookform/resolvers/zod';
+import { signIn } from 'next-auth/react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+
 import { Button } from '@/components/atoms/button';
 import {
   Form,
@@ -10,31 +15,18 @@ import {
   FormMessage,
 } from '@/components/atoms/form';
 import { Input } from '@/components/atoms/input';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { signIn } from 'next-auth/react';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import * as z from 'zod';
 
-// Schema validation với zod
-const signInSchema = z.object({
-  email: z.string().email('Email không hợp lệ'),
-  password: z.string().min(6, 'Mật khẩu phải từ 6 ký tự trở lên'),
-});
-
-type SignInFormValues = z.infer<typeof signInSchema>;
+import { ROUTES } from '@/shared/constants';
+import { LoginFormValues, loginSchema } from '@/shared/schemas/loginSchema';
 
 export default function SignInForm() {
   const [error, setError] = useState('');
-  const form = useForm<SignInFormValues>({
-    resolver: zodResolver(signInSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-    },
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: { email: '', password: '' },
   });
 
-  async function onSubmit(data: SignInFormValues) {
+  async function onSubmit(data: LoginFormValues) {
     setError('');
     const res = await signIn('credentials', {
       redirect: false,
@@ -45,7 +37,7 @@ export default function SignInForm() {
     if (res?.error) {
       setError('Email hoặc mật khẩu không đúng');
     } else {
-      window.location.href = '/';
+      window.location.href = ROUTES.HOME;
     }
   }
 
@@ -66,7 +58,11 @@ export default function SignInForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="you@example.com" {...field} />
+                <Input
+                  placeholder="you@example.com"
+                  autoComplete="email"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -80,7 +76,12 @@ export default function SignInForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="******" {...field} />
+                <Input
+                  type="password"
+                  placeholder="******"
+                  autoComplete="current-password"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

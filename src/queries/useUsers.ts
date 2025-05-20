@@ -1,4 +1,5 @@
 import { api } from '@/lib/api-client';
+import { User } from '@/server/entities/User';
 import { UserFormValues } from '@/shared/schemas/userSchema';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
@@ -28,13 +29,14 @@ export const useCreateUser = () => {
 
 export const useUpdateUser = () => {
   const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async ({
       id,
       updates,
     }: {
       id: string;
-      updates: { name?: string; value?: number };
+      updates: Partial<Omit<User, 'id' | 'created_at' | 'updated_at'>>;
     }) => {
       const { data } = await api.put(`/users/${id}`, updates);
       return data;

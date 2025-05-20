@@ -1,13 +1,17 @@
-// /components/layout/Header.tsx
 'use client';
 
-import { HEADER_TABS } from '@/shared/constants/navigation';
-import { ROUTES } from '@/shared/constants/routes';
+import { AUTH_STATUS, HEADER_TABS, ROUTES } from '@/shared/constants';
+import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { Button } from '../atoms/button';
 
 export default function Header() {
   const pathname = usePathname();
+  const { status } = useSession();
+  console.log(status);
+
+  const isLoggedIn = status === AUTH_STATUS.AUTHENTICATED;
 
   return (
     <header className="bg-primary text-primary-foreground p-4">
@@ -25,8 +29,14 @@ export default function Header() {
             </Link>
           ))}
         </div>
-        <div className="">
-          <Link href={ROUTES.SIGN_IN}>Sign in</Link>
+        <div className="flex gap-2">
+          {!isLoggedIn && (
+            <>
+              <Link href={ROUTES.LOGIN}>Login</Link>
+              <Link href={ROUTES.REGISTER}>Register</Link>
+            </>
+          )}
+          {isLoggedIn && <Button onClick={() => signOut()}>Logout</Button>}
         </div>
       </div>
     </header>

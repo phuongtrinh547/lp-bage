@@ -1,11 +1,8 @@
-import Footer from '@/components/layout/footer';
-import Header from '@/components/layout/header';
 import QueryProvider from '@/lib/QueryProvider';
 import { cn } from '@/lib/utils';
 import '@/styles/globals.css';
 import type { Metadata } from 'next';
 import { Inter, Noto_Sans_JP } from 'next/font/google';
-import { Toaster } from 'sonner';
 import { siteConfig } from './config/site';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -18,7 +15,6 @@ export const metadata: Metadata = {
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
-  icons: [{ rel: 'icon', url: '/favicon.ico' }],
 };
 
 export default function RootLayout({
@@ -34,10 +30,7 @@ export default function RootLayout({
           NotoSansFont.className,
         )}
       >
-        <Toaster position="top-center" richColors />
-        <Header />
         <QueryProvider>{children}</QueryProvider>
-        <Footer />
       </body>
     </html>
   );
